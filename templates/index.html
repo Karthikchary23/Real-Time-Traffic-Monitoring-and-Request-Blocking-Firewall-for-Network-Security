@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Network Attack Monitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+
+
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            background-color: #0f0f0f;
+            color: #0ff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        h2 {
+            color: #0ff;
+            font-size: 24px;
+            margin-top: 20px;
+            text-shadow: 0 0 8px #0ff;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #0ff;
+            color: #0ff;
+            box-shadow: 0 0 15px #0ff;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        th, td {
+            padding: 14px;
+            border: 1px solid #0ff;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        th {
+            background: #002b36;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 255, 0.3);
+            transition: 0.3s;
+        }
+
+        .red-text {
+            color: #ff0000;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        button {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            text-shadow: 0 0 5px #fff;
+        }
+
+        button:hover {
+            background: #cc0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .spinner {
+            display: none;
+            margin-left: 10px;
+            width: 18px;
+            height: 18px;
+            border: 3px solid #fff;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        ul li {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 14px;
+            margin: 5px auto;
+            width: 60%;
+            border-radius: 8px;
+            border: 2px solid #0ff;
+            color: #0ff;
+            font-size: 18px;
+            text-shadow: 0 0 5px #0ff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 10px #0ff;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>💻 Hacker-Themed Network Attack Monitor</h1>
+
+    <h2>⚠️ Active Threats</h2>
+    <table>
+        <tr><th>IP Address</th><th>Threat Type</th></tr>
+        {% for attack in attacks %}
+        <tr>
+            <td class="red-text">{{ attack[0] }}</td>
+            <td class="red-text">{{ attack[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>🚫 Blocked IPs</h2>
+    <ul>
+        {% for ip in blocked_ips %}
+        <li>
+            {{ ip }}
+            <form method="post" action="/unblock" onsubmit="showSpinner(event, this)">
+                <input type="hidden" name="ip" value="{{ ip }}">
+                <button type="submit">Unblock</button>
+                <div class="spinner"></div>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+       function showSpinner(event, form) {
+    event.preventDefault(); 
+    let button = form.querySelector("button");
+    let spinner = form.querySelector(".spinner");
+
+    button.textContent = "Unblocking...";
+    spinner.style.display = "inline-block";
+
+    setTimeout(() => {
+        form.submit();  // Submit form after 1 second delay
+    }, 1000);
+}
+
+    </script>
+    <script>
+        setInterval(() => {
+            try {
+                location.reload();
+            } catch (error) {
+                console.error("Error reloading page:", error);
+            }
+        }, 20000);
+    </script>
+
+</body>
+</html>
